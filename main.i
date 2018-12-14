@@ -953,6 +953,36 @@ extern const unsigned short instructionsbg1Map[1024];
 
 extern const unsigned short instructionsbg1Pal[256];
 # 37 "main.c" 2
+# 1 "instructionsbg2.h" 1
+# 22 "instructionsbg2.h"
+extern const unsigned short instructionsbg2Tiles[3184];
+
+
+extern const unsigned short instructionsbg2Map[1024];
+
+
+extern const unsigned short instructionsbg2Pal[256];
+# 38 "main.c" 2
+# 1 "instructionsbg3.h" 1
+# 22 "instructionsbg3.h"
+extern const unsigned short instructionsbg3Tiles[2848];
+
+
+extern const unsigned short instructionsbg3Map[1024];
+
+
+extern const unsigned short instructionsbg3Pal[256];
+# 39 "main.c" 2
+# 1 "instructionsbg4.h" 1
+# 22 "instructionsbg4.h"
+extern const unsigned short instructionsbg4Tiles[2688];
+
+
+extern const unsigned short instructionsbg4Map[1024];
+
+
+extern const unsigned short instructionsbg4Pal[256];
+# 40 "main.c" 2
 # 1 "gamebg0.h" 1
 # 22 "gamebg0.h"
 extern const unsigned short gamebg0Tiles[1360];
@@ -962,7 +992,7 @@ extern const unsigned short gamebg0Map[1024];
 
 
 extern const unsigned short gamebg0Pal[256];
-# 38 "main.c" 2
+# 41 "main.c" 2
 # 1 "gamebg1.h" 1
 # 22 "gamebg1.h"
 extern const unsigned short gamebg1Tiles[2336];
@@ -972,7 +1002,7 @@ extern const unsigned short gamebg1Map[1024];
 
 
 extern const unsigned short gamebg1Pal[256];
-# 39 "main.c" 2
+# 42 "main.c" 2
 # 1 "pausebg0.h" 1
 # 22 "pausebg0.h"
 extern const unsigned short pausebg0Tiles[272];
@@ -982,7 +1012,7 @@ extern const unsigned short pausebg0Map[1024];
 
 
 extern const unsigned short pausebg0Pal[256];
-# 40 "main.c" 2
+# 43 "main.c" 2
 # 1 "pausebg1.h" 1
 # 22 "pausebg1.h"
 extern const unsigned short pausebg1Tiles[1328];
@@ -992,7 +1022,7 @@ extern const unsigned short pausebg1Map[1024];
 
 
 extern const unsigned short pausebg1Pal[256];
-# 41 "main.c" 2
+# 44 "main.c" 2
 # 1 "pausebg2.h" 1
 # 22 "pausebg2.h"
 extern const unsigned short pausebg2Tiles[2080];
@@ -1002,7 +1032,7 @@ extern const unsigned short pausebg2Map[1024];
 
 
 extern const unsigned short pausebg2Pal[256];
-# 42 "main.c" 2
+# 45 "main.c" 2
 # 1 "losebg0.h" 1
 # 22 "losebg0.h"
 extern const unsigned short losebg0Tiles[272];
@@ -1012,7 +1042,7 @@ extern const unsigned short losebg0Map[1024];
 
 
 extern const unsigned short losebg0Pal[256];
-# 43 "main.c" 2
+# 46 "main.c" 2
 # 1 "losebg1.h" 1
 # 22 "losebg1.h"
 extern const unsigned short losebg1Tiles[1360];
@@ -1022,7 +1052,7 @@ extern const unsigned short losebg1Map[1024];
 
 
 extern const unsigned short losebg1Pal[256];
-# 44 "main.c" 2
+# 47 "main.c" 2
 
 
 # 1 "game.h" 1
@@ -1130,7 +1160,7 @@ void initEnemyEnergyWaves();
 void fireEnemyEnergyWave(ENEMY *);
 void updateEnemyEnergyWaves(ENERGYWAVE *);
 void drawEnemyEnergyWaves();
-# 47 "main.c" 2
+# 50 "main.c" 2
 # 1 "select.h" 1
 
 extern int select;
@@ -1140,7 +1170,7 @@ void updateStart();
 void drawStart();
 void updatePause();
 void drawPause();
-# 48 "main.c" 2
+# 51 "main.c" 2
 
 
 # 1 "spritesheet.h" 1
@@ -1149,33 +1179,33 @@ extern const unsigned short spritesheetTiles[16384];
 
 
 extern const unsigned short spritesheetPal[256];
-# 51 "main.c" 2
+# 54 "main.c" 2
 
 
 # 1 "VacationWasteland.h" 1
 # 20 "VacationWasteland.h"
 extern const unsigned char VacationWasteland[2404800];
-# 54 "main.c" 2
+# 57 "main.c" 2
 # 1 "MegaHyperUltrastorm.h" 1
 # 20 "MegaHyperUltrastorm.h"
 extern const unsigned char MegaHyperUltrastorm[2129472];
-# 55 "main.c" 2
+# 58 "main.c" 2
 # 1 "SpringBreak.h" 1
 # 20 "SpringBreak.h"
 extern const unsigned char SpringBreak[2648160];
-# 56 "main.c" 2
+# 59 "main.c" 2
 # 1 "clang.h" 1
 # 20 "clang.h"
 extern const unsigned char clang[17243];
-# 57 "main.c" 2
+# 60 "main.c" 2
 # 1 "quack.h" 1
 # 20 "quack.h"
 extern const unsigned char quack[1543];
-# 58 "main.c" 2
+# 61 "main.c" 2
 # 1 "swish.h" 1
 # 20 "swish.h"
 extern const unsigned char swish[5920];
-# 59 "main.c" 2
+# 62 "main.c" 2
 
 
 void initialize();
@@ -1183,8 +1213,12 @@ void initialize();
 
 void goToStart();
 void start();
-void goToInstructions();
-void instructions();
+void goToInstructions1();
+void instructions1();
+void goToInstructions2();
+void instructions2();
+void goToInstructions3();
+void instructions3();
 void goToGame();
 void game();
 void goToPause();
@@ -1199,7 +1233,7 @@ OBJ_ATTR shadowOAM[128];
 int seed;
 
 
-enum {START, INSTRUCTIONS, GAME, PAUSE, LOSE};
+enum {START, INSTRUCTIONS1, INSTRUCTIONS2, INSTRUCTIONS3, GAME, PAUSE, LOSE};
 int state;
 
 
@@ -1221,8 +1255,14 @@ int main() {
             case START:
                 start();
                 break;
-            case INSTRUCTIONS:
-                instructions();
+            case INSTRUCTIONS1:
+                instructions1();
+                break;
+            case INSTRUCTIONS2:
+                instructions2();
+                break;
+            case INSTRUCTIONS3:
+                instructions3();
                 break;
             case GAME:
                 game();
@@ -1284,8 +1324,12 @@ void start() {
             initGame();
             goToGame();
         } else {
+            hOff = 0;
+            vOff = 0;
+            (*(volatile unsigned short *)0x04000014) = hOff;
+            (*(volatile unsigned short *)0x04000016) = vOff;
             playSoundB(clang, 17243, 11025, 0);
-            goToInstructions();
+            goToInstructions1();
         }
     }
 }
@@ -1326,25 +1370,72 @@ void game() {
     }
 }
 
-void goToInstructions() {
+void goToInstructions1() {
     DMANow(3, instructionsbg0Pal, ((unsigned short *)0x5000000), (512 / 2) | (0 << 23) | (0 << 21));
     DMANow(3, &instructionsbg0Tiles, &((charblock *)0x6000000)[0], (544 / 2) | (0 << 23) | (0 << 21));
     DMANow(3, &instructionsbg0Map, &((screenblock *)0x6000000)[31], (2048 / 2) | (0 << 23) | (0 << 21));
-    DMANow(3, &instructionsbg1Tiles, &((charblock *)0x6000000)[1], (4992 / 2) | (0 << 23) | (0 << 21));
-    DMANow(3, &instructionsbg1Map, &((screenblock *)0x6000000)[30], (2048 / 2) | (0 << 23) | (0 << 21));
-    hOff = 0;
-    vOff = 0;
-    (*(volatile unsigned short *)0x04000014) = hOff;
-    (*(volatile unsigned short *)0x04000016) = vOff;
-    state = INSTRUCTIONS;
+    DMANow(3, &instructionsbg2Tiles, &((charblock *)0x6000000)[1], (6368 / 2) | (0 << 23) | (0 << 21));
+    DMANow(3, &instructionsbg2Map, &((screenblock *)0x6000000)[30], (2048 / 2) | (0 << 23) | (0 << 21));
+    state = INSTRUCTIONS1;
 }
 
-void instructions() {
+void instructions1() {
     waitForVBlank();
     hOff--;
     vOff--;
     (*(volatile unsigned short *)0x04000014) = hOff/4;
     (*(volatile unsigned short *)0x04000016) = vOff/4;
+    if ((!(~(oldButtons)&((1<<4))) && (~buttons & ((1<<4))))) {
+        playSoundB(clang, 17243, 11025, 0);
+        goToInstructions2();
+    }
+    if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        playSoundB(clang, 17243, 11025, 0);
+        goToStart();
+    }
+}
+
+void goToInstructions2() {
+    DMANow(3, &instructionsbg3Tiles, &((charblock *)0x6000000)[1], (5696 / 2) | (0 << 23) | (0 << 21));
+    DMANow(3, &instructionsbg3Map, &((screenblock *)0x6000000)[30], (2048 / 2) | (0 << 23) | (0 << 21));
+    state = INSTRUCTIONS2;
+}
+
+void instructions2() {
+    waitForVBlank();
+    hOff--;
+    vOff--;
+    (*(volatile unsigned short *)0x04000014) = hOff/4;
+    (*(volatile unsigned short *)0x04000016) = vOff/4;
+    if ((!(~(oldButtons)&((1<<5))) && (~buttons & ((1<<5))))) {
+        playSoundB(clang, 17243, 11025, 0);
+        goToInstructions1();
+    }
+    if ((!(~(oldButtons)&((1<<4))) && (~buttons & ((1<<4))))) {
+        playSoundB(clang, 17243, 11025, 0);
+        goToInstructions3();
+    }
+    if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        playSoundB(clang, 17243, 11025, 0);
+        goToStart();
+    }
+}
+
+void goToInstructions3() {
+    DMANow(3, &instructionsbg4Tiles, &((charblock *)0x6000000)[1], (5376 / 2) | (0 << 23) | (0 << 21));
+    DMANow(3, &instructionsbg4Map, &((screenblock *)0x6000000)[30], (2048 / 2) | (0 << 23) | (0 << 21));
+    state = INSTRUCTIONS3;
+}
+void instructions3() {
+    waitForVBlank();
+    hOff--;
+    vOff--;
+    (*(volatile unsigned short *)0x04000014) = hOff/4;
+    (*(volatile unsigned short *)0x04000016) = vOff/4;
+    if ((!(~(oldButtons)&((1<<5))) && (~buttons & ((1<<5))))) {
+        playSoundB(clang, 17243, 11025, 0);
+        goToInstructions2();
+    }
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
         playSoundB(clang, 17243, 11025, 0);
         goToStart();

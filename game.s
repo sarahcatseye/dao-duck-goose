@@ -1157,24 +1157,60 @@ enemyCloseAttack:
 	ldr	r2, [r0, #48]
 	add	r3, r3, r1
 	cmp	r2, r1
-	push	{r4, r5, r6, r7, r8, lr}
+	push	{r4, r5, r6, lr}
 	mov	r4, r0
 	str	r1, [r0, #80]
 	str	r3, [r0, #56]
-	beq	.L200
+	beq	.L206
 .L186:
 	cmp	r2, #2
-	beq	.L201
+	beq	.L207
 	cmp	r2, #3
-	beq	.L202
+	beq	.L194
 .L185:
-	pop	{r4, r5, r6, r7, r8, lr}
+	pop	{r4, r5, r6, lr}
 	bx	lr
-.L202:
-	ldr	r1, [r4, #56]
-	ldr	r2, [r4, #68]
+.L207:
+	ldr	r3, [r4, #68]
+	ldr	r2, .L210
+	lsl	r3, r3, #2
+	smull	r0, r1, r3, r2
+	asr	r3, r3, #31
+	ldr	r2, [r4, #56]
+	rsb	r3, r3, r1, asr #1
+	cmp	r2, r3
+	bne	.L185
+	mov	r2, #3
+	mov	r3, #0
+	str	r2, [r4, #48]
+	str	r3, [r4, #76]
 .L194:
-	cmp	r1, r2
+	ldr	r3, .L210+4
+	ldr	r3, [r3, #20]
+	cmp	r3, #0
+	beq	.L196
+	ldr	r3, .L210+8
+	ldr	r3, [r3]
+	cmp	r3, #1
+	ldr	r3, [r4, #28]
+	ble	.L208
+	cmp	r3, #1
+	ble	.L196
+.L198:
+	mov	ip, #0
+	ldr	lr, .L210+12
+	mov	r3, ip
+	ldr	r2, .L210+16
+	ldr	r1, .L210+20
+	ldr	r0, .L210+24
+	ldr	r5, .L210+28
+	str	ip, [lr, #20]
+	mov	lr, pc
+	bx	r5
+.L196:
+	ldr	r2, [r4, #56]
+	ldr	r3, [r4, #68]
+	cmp	r2, r3
 	bne	.L185
 	mov	r3, #0
 	mov	r1, #4
@@ -1183,52 +1219,37 @@ enemyCloseAttack:
 	str	r3, [r4, #52]
 	str	r3, [r4, #56]
 	str	r2, [r4, #40]
-	pop	{r4, r5, r6, r7, r8, lr}
+	pop	{r4, r5, r6, lr}
 	bx	lr
-.L201:
-	ldr	r2, [r4, #68]
-	ldr	r1, .L204
-	lsl	r3, r2, #2
-	smull	r6, r7, r3, r1
-	asr	r3, r3, #31
-	ldr	r1, [r4, #56]
-	rsb	r3, r3, r7, asr #1
-	cmp	r1, r3
-	bne	.L185
-	mov	r0, #3
-	mov	r3, #0
-	str	r0, [r4, #48]
-	str	r3, [r4, #76]
-	b	.L194
-.L200:
-	ldr	r5, .L204+4
+.L206:
+	ldr	r5, .L210+4
 	ldr	r2, [r5, #20]
 	cmp	r2, #0
 	beq	.L187
-	ldr	r2, .L204+8
+	ldr	r2, .L210+8
 	ldr	r2, [r2]
 	cmp	r2, r1
 	ldr	r2, [r0, #28]
-	ble	.L203
+	ble	.L209
 	cmp	r2, #1
 	ble	.L187
 .L189:
 	mov	ip, #0
 	mov	r2, #3
-	ldr	lr, .L204+12
+	ldr	lr, .L210+12
 	mov	r3, ip
 	str	r2, [r4, #48]
-	ldr	r1, .L204+16
-	ldr	r2, .L204+20
-	ldr	r0, .L204+24
-	ldr	r6, .L204+28
+	ldr	r1, .L210+20
+	ldr	r2, .L210+16
+	ldr	r0, .L210+24
+	ldr	r6, .L210+28
 	str	ip, [lr, #20]
 	mov	lr, pc
 	bx	r6
 	ldr	r3, [r4, #56]
 .L187:
 	ldr	r2, [r4, #68]
-	ldr	ip, .L204
+	ldr	ip, .L210
 	lsl	r2, r2, #1
 	smull	r0, r1, r2, ip
 	asr	r2, r2, #31
@@ -1238,10 +1259,10 @@ enemyCloseAttack:
 	bne	.L186
 .L190:
 	mov	r3, #0
-	ldr	r2, .L204+20
-	ldr	r1, .L204+32
-	ldr	r0, .L204+36
-	ldr	r6, .L204+28
+	ldr	r2, .L210+16
+	ldr	r1, .L210+32
+	ldr	r0, .L210+36
+	ldr	r6, .L210+28
 	mov	lr, pc
 	bx	r6
 	mov	r3, #1
@@ -1257,19 +1278,23 @@ enemyCloseAttack:
 	str	r0, [r5, #32]
 	str	r1, [r5, #36]
 	b	.L186
-.L203:
+.L208:
+	cmp	r3, #1
+	bgt	.L196
+	b	.L198
+.L209:
 	cmp	r2, r1
 	bgt	.L187
 	b	.L189
-.L205:
+.L211:
 	.align	2
-.L204:
+.L210:
 	.word	1717986919
 	.word	player
 	.word	target
 	.word	playerEnergyWave
-	.word	17243
 	.word	11025
+	.word	17243
 	.word	clang
 	.word	playSoundB
 	.word	1543
@@ -1293,36 +1318,36 @@ enemyRetreat:
 	str	r5, [r0, #80]
 	ldr	r3, [r0, #4]
 	ldr	r1, [r0, #12]
-	beq	.L213
-	ble	.L210
+	beq	.L219
+	ble	.L216
 	ldr	ip, [r0, #32]
 	sub	r2, r2, ip
 	str	r2, [r0]
-.L208:
+.L214:
 	cmp	r1, r3
-	blt	.L214
+	blt	.L220
 	ldrgt	r2, [r0, #36]
 	addgt	r3, r2, r3
 	strgt	r3, [r0, #4]
-.L206:
+.L212:
 	pop	{r4, r5, r6, r7, r8, lr}
 	bx	lr
-.L214:
+.L220:
 	ldr	r2, [r0, #36]
 	sub	r3, r3, r2
 	str	r3, [r0, #4]
 	pop	{r4, r5, r6, r7, r8, lr}
 	bx	lr
-.L213:
+.L219:
 	cmp	r1, r3
-	bne	.L208
-	ldr	r3, .L215
+	bne	.L214
+	ldr	r3, .L221
 	str	r5, [r0, #40]
 	str	r5, [r0, #56]
 	mov	r4, r0
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L215+4
+	ldr	r3, .L221+4
 	smull	r6, r7, r0, r3
 	asr	r3, r0, #31
 	rsb	r3, r3, r7, asr #5
@@ -1332,15 +1357,15 @@ enemyRetreat:
 	str	r5, [r4, #52]
 	str	r5, [r4, #48]
 	str	r3, [r4, #60]
-	b	.L206
-.L210:
+	b	.L212
+.L216:
 	ldrlt	ip, [r0, #32]
 	addlt	r2, ip, r2
 	strlt	r2, [r0]
-	b	.L208
-.L216:
+	b	.L214
+.L222:
 	.align	2
-.L215:
+.L221:
 	.word	rand
 	.word	458129845
 	.size	enemyRetreat, .-enemyRetreat
@@ -1356,7 +1381,7 @@ enemyDying:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
 	ldr	r2, [r0, #56]
-	ldr	r3, .L225
+	ldr	r3, .L231
 	add	r2, r2, #1
 	push	{r4, r5}
 	smull	r4, r5, r2, r3
@@ -1365,30 +1390,30 @@ enemyDying:
 	add	r3, r3, r3, lsl #2
 	subs	r3, r2, r3, lsl #1
 	str	r2, [r0, #56]
-	bne	.L217
+	bne	.L223
 	ldr	r2, [r0, #48]
 	add	r2, r2, #1
 	cmp	r2, #6
 	str	r2, [r0, #48]
-	ble	.L217
+	ble	.L223
 	mov	ip, #6
-	ldr	r1, .L225+4
+	ldr	r1, .L231+4
 	ldr	r2, [r1]
 	add	r2, r2, #1
 	cmp	r2, #0
 	str	r3, [r0, #84]
 	str	r2, [r1]
 	str	ip, [r0, #48]
-	beq	.L217
+	beq	.L223
 	tst	r2, #3
 	popeq	{r4, r5}
 	beq	initEnemies
-.L217:
+.L223:
 	pop	{r4, r5}
 	bx	lr
-.L226:
+.L232:
 	.align	2
-.L225:
+.L231:
 	.word	1717986919
 	.word	enemiesDefeated
 	.size	enemyDying, .-enemyDying
@@ -1403,44 +1428,44 @@ updateTargetPointer:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L248
+	ldr	r3, .L254
 	ldrh	r3, [r3]
 	tst	r3, #16
-	beq	.L228
-	ldr	r2, .L248+4
+	beq	.L234
+	ldr	r2, .L254+4
 	ldrh	r2, [r2]
 	tst	r2, #16
-	beq	.L244
-.L228:
+	beq	.L250
+.L234:
 	tst	r3, #32
-	beq	.L229
-	ldr	r2, .L248+4
+	beq	.L235
+	ldr	r2, .L254+4
 	ldrh	r2, [r2]
 	tst	r2, #32
-	beq	.L245
-.L229:
+	beq	.L251
+.L235:
 	tst	r3, #64
-	beq	.L230
-	ldr	r2, .L248+4
+	beq	.L236
+	ldr	r2, .L254+4
 	ldrh	r2, [r2]
 	tst	r2, #64
-	beq	.L246
-.L230:
+	beq	.L252
+.L236:
 	tst	r3, #128
 	bxeq	lr
-.L247:
-	ldr	r3, .L248+4
+.L253:
+	ldr	r3, .L254+4
 	ldrh	r3, [r3]
 	tst	r3, #128
 	bxne	lr
-	ldr	r2, .L248+8
+	ldr	r2, .L254+8
 	ldr	r3, [r2]
 	tst	r3, #1
 	addeq	r3, r3, #1
 	streq	r3, [r2]
 	bx	lr
-.L246:
-	ldr	r0, .L248+8
+.L252:
+	ldr	r0, .L254+8
 	ldr	r1, [r0]
 	cmp	r1, #0
 	and	r2, r1, #1
@@ -1449,25 +1474,25 @@ updateTargetPointer:
 	subeq	r1, r1, #1
 	streq	r1, [r0]
 	tst	r3, #128
-	bne	.L247
+	bne	.L253
 	bx	lr
-.L245:
-	ldr	r1, .L248+8
+.L251:
+	ldr	r1, .L254+8
 	ldr	r2, [r1]
 	cmp	r2, #1
 	subgt	r2, r2, #2
 	strgt	r2, [r1]
-	b	.L229
-.L244:
-	ldr	r1, .L248+8
+	b	.L235
+.L250:
+	ldr	r1, .L254+8
 	ldr	r2, [r1]
 	cmp	r2, #1
 	addle	r2, r2, #2
 	strle	r2, [r1]
-	b	.L228
-.L249:
+	b	.L234
+.L255:
 	.align	2
-.L248:
+.L254:
 	.word	oldButtons
 	.word	buttons
 	.word	target
@@ -1482,24 +1507,24 @@ drawEnemies:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
-	ldr	r3, .L281
+	ldr	r3, .L287
 	ldr	r0, [r3, #84]
 	cmp	r0, #0
 	push	{r4, r5, r6, r7, lr}
 	mov	r2, #4
 	mov	r1, #0
-	ldr	ip, .L281+4
-	ldr	r5, .L281+8
-	ldr	r6, .L281+12
-	ldr	r4, .L281+16
+	ldr	ip, .L287+4
+	ldr	r5, .L287+8
+	ldr	r6, .L287+12
+	ldr	r4, .L287+16
 	ldr	r7, [r3, #48]
-	beq	.L251
-.L277:
+	beq	.L257
+.L283:
 	ldr	r0, [r3, #40]
 	cmp	r0, #1
-	beq	.L275
+	beq	.L281
 	cmp	r0, #5
-	beq	.L276
+	beq	.L282
 	ldr	r0, [r3]
 	lsl	r2, r2, #3
 	orr	r0, r0, #16384
@@ -1511,7 +1536,7 @@ drawEnemies:
 	orrgt	r0, r0, #53248
 	orrle	r0, r0, r5
 	strh	r0, [lr, #2]	@ movhi
-.L264:
+.L270:
 	ldr	lr, [r3, #24]
 	ldr	r0, [r3, #52]
 	add	lr, lr, #1
@@ -1520,18 +1545,18 @@ drawEnemies:
 	add	r2, ip, r2
 	orr	r7, lr, r7, lsl #3
 	strh	r7, [r2, #4]	@ movhi
-.L255:
+.L261:
 	add	r1, r1, #1
 	cmp	r1, #4
 	add	r3, r3, #88
-	beq	.L250
-.L278:
+	beq	.L256
+.L284:
 	ldr	r0, [r3, #84]
 	cmp	r0, #0
 	ldr	r2, [r4, r1, lsl #2]
 	ldr	r7, [r3, #48]
-	bne	.L277
-.L251:
+	bne	.L283
+.L257:
 	ldr	lr, [r3, #4]
 	ldr	r0, [r3]
 	cmp	r1, #1
@@ -1554,11 +1579,11 @@ drawEnemies:
 	cmp	r1, #4
 	strh	r0, [r2, #4]	@ movhi
 	add	r3, r3, #88
-	bne	.L278
-.L250:
+	bne	.L284
+.L256:
 	pop	{r4, r5, r6, r7, lr}
 	bx	lr
-.L275:
+.L281:
 	ldr	r0, [r3]
 	lsl	r2, r2, #3
 	strh	r0, [ip, r2]	@ movhi
@@ -1568,14 +1593,14 @@ drawEnemies:
 	orrgt	r0, r0, #36864
 	orrle	r0, r0, r6
 	strh	r0, [lr, #2]	@ movhi
-	b	.L264
-.L276:
+	b	.L270
+.L282:
 	cmp	r7, #1
-	beq	.L279
+	beq	.L285
 	cmp	r7, #3
-	beq	.L280
+	beq	.L286
 	lslle	r2, r2, #3
-	ble	.L259
+	ble	.L265
 	ldr	r0, [r3]
 	lsl	r2, r2, #3
 	orr	r0, r0, #16384
@@ -1583,12 +1608,12 @@ drawEnemies:
 	strh	r0, [ip, r2]	@ movhi
 	add	lr, ip, r2
 	ldr	r0, [r3, #4]
-	bgt	.L274
-.L262:
+	bgt	.L280
+.L268:
 	orr	r0, r0, r5
 	strh	r0, [lr, #2]	@ movhi
-	b	.L259
-.L280:
+	b	.L265
+.L286:
 	ldr	r0, [r3]
 	lsl	r2, r2, #3
 	sub	r0, r0, #32
@@ -1596,13 +1621,13 @@ drawEnemies:
 	strh	r0, [ip, r2]	@ movhi
 	add	lr, ip, r2
 	ldr	r0, [r3, #4]
-	ble	.L262
-.L274:
+	ble	.L268
+.L280:
 	sub	r0, r0, #32
-.L273:
+.L279:
 	orr	r0, r0, #53248
 	strh	r0, [lr, #2]	@ movhi
-.L259:
+.L265:
 	ldr	lr, [r3, #24]
 	ldr	r0, [r3, #52]
 	add	lr, lr, #1
@@ -1611,8 +1636,8 @@ drawEnemies:
 	add	r2, ip, r2
 	orr	r7, lr, r7, lsl #2
 	strh	r7, [r2, #4]	@ movhi
-	b	.L255
-.L279:
+	b	.L261
+.L285:
 	ldr	r0, [r3]
 	sub	r0, r0, #32
 	lsl	r2, r2, #3
@@ -1621,11 +1646,11 @@ drawEnemies:
 	strh	r0, [ip, r2]	@ movhi
 	add	lr, ip, r2
 	ldrsh	r0, [r3, #4]
-	ble	.L262
-	b	.L273
-.L282:
+	ble	.L268
+	b	.L279
+.L288:
 	.align	2
-.L281:
+.L287:
 	.word	enemies
 	.word	shadowOAM
 	.word	-16384
@@ -1643,38 +1668,38 @@ drawTargetPointer:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L287
+	ldr	r3, .L293
 	ldr	r2, [r3]
 	add	r3, r2, r2, lsl #2
-	ldr	r1, .L287+4
+	ldr	r1, .L293+4
 	add	r3, r2, r3, lsl #1
 	lsl	r3, r3, #3
 	add	r0, r1, r3
 	ldr	ip, [r0, #40]
 	ldr	r3, [r1, r3]
-	ldr	r1, .L287+8
+	ldr	r1, .L293+8
 	sub	r3, r3, #16
 	cmp	ip, #7
 	strh	r3, [r1, #8]	@ movhi
 	ldrh	r3, [r0, #4]
-	beq	.L284
+	beq	.L290
 	add	r3, r3, #8
 	orr	r3, r3, #16384
 	strh	r3, [r1, #10]	@ movhi
-.L285:
+.L291:
 	mov	r3, #720
 	strh	r3, [r1, #12]	@ movhi
 	bx	lr
-.L284:
+.L290:
 	cmp	r2, #1
 	subgt	r3, r3, #16
 	addle	r3, r3, #24
 	orr	r3, r3, #16384
 	strh	r3, [r1, #10]	@ movhi
-	b	.L285
-.L288:
+	b	.L291
+.L294:
 	.align	2
-.L287:
+.L293:
 	.word	target
 	.word	enemies
 	.word	shadowOAM
@@ -1693,7 +1718,7 @@ initEnergyWave:
 	mov	r2, #0
 	mov	r0, #32
 	mov	r1, #1
-	ldr	r3, .L290
+	ldr	r3, .L296
 	str	r2, [r3]
 	str	r2, [r3, #4]
 	str	r2, [r3, #20]
@@ -1703,9 +1728,9 @@ initEnergyWave:
 	str	r1, [r3, #24]
 	str	r1, [r3, #28]
 	bx	lr
-.L291:
+.L297:
 	.align	2
-.L290:
+.L296:
 	.word	playerEnergyWave
 	.size	initEnergyWave, .-initEnergyWave
 	.align	2
@@ -1719,11 +1744,11 @@ fireEnergyWave:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r0, .L295
-	ldr	r3, .L295+4
+	ldr	r0, .L301
+	ldr	r3, .L301+4
 	ldr	r1, [r0]
 	ldr	r3, [r3]
-	ldr	r2, .L295+8
+	ldr	r2, .L301+8
 	ldr	r0, [r0, #4]
 	sub	r1, r1, #36
 	cmp	r3, #1
@@ -1737,7 +1762,7 @@ fireEnergyWave:
 	str	r1, [r2, #32]
 	add	r1, r3, r3, lsl #2
 	add	r3, r3, r1, lsl r0
-	ldr	r1, .L295+12
+	ldr	r1, .L301+12
 	lsl	r3, r3, #3
 	ldr	ip, [r1, r3]!
 	ldr	r3, [r1, #4]
@@ -1745,9 +1770,9 @@ fireEnergyWave:
 	str	r3, [r2, #40]
 	str	r0, [r2, #20]
 	bx	lr
-.L296:
+.L302:
 	.align	2
-.L295:
+.L301:
 	.word	player
 	.word	target
 	.word	playerEnergyWave
@@ -1764,25 +1789,25 @@ playerRangedAttack:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, r5, r6, r7, r8, lr}
-	ldr	r4, .L312
+	ldr	r4, .L318
 	ldr	r3, [r4, #32]
 	ldr	r2, [r4, #36]
 	add	r3, r3, #1
 	cmp	r2, #1
 	str	r3, [r4, #32]
-	beq	.L307
+	beq	.L313
 	cmp	r2, #3
-	beq	.L308
+	beq	.L314
 	cmp	r2, #5
-	beq	.L309
+	beq	.L315
 	cmp	r2, #6
-	beq	.L310
-.L297:
+	beq	.L316
+.L303:
 	pop	{r4, r5, r6, r7, r8, lr}
 	bx	lr
-.L308:
+.L314:
 	ldr	r2, [r4, #28]
-	ldr	ip, .L312+4
+	ldr	ip, .L318+4
 	lsl	r2, r2, #3
 	smull	r0, r1, r2, ip
 	asr	r2, r2, #31
@@ -1792,27 +1817,27 @@ playerRangedAttack:
 	moveq	r3, #1
 	streq	r2, [r4, #36]
 	streq	r3, [r4, #20]
-	b	.L297
-.L307:
+	b	.L303
+.L313:
 	ldr	r2, [r4, #40]
 	cmp	r2, #6
-	beq	.L311
+	beq	.L317
 	cmp	r2, #7
-	bne	.L297
+	bne	.L303
 	ldr	r2, [r4, #28]
-.L302:
-	ldr	ip, .L312+4
+.L308:
+	ldr	ip, .L318+4
 	rsb	r2, r2, r2, lsl #3
 	smull	r0, r1, r2, ip
 	asr	r2, r2, #31
 	rsb	r2, r2, r1, asr #2
 	cmp	r3, r2
-	bne	.L297
+	bne	.L303
 	mov	r3, #0
-	ldr	r2, .L312+8
-	ldr	r5, .L312+12
-	ldr	r1, .L312+16
-	ldr	r0, .L312+20
+	ldr	r2, .L318+8
+	ldr	r5, .L318+12
+	ldr	r1, .L318+16
+	ldr	r0, .L318+20
 	mov	lr, pc
 	bx	r5
 	mov	r2, #6
@@ -1822,20 +1847,20 @@ playerRangedAttack:
 	str	r2, [r4, #40]
 	pop	{r4, r5, r6, r7, r8, lr}
 	b	fireEnergyWave
-.L310:
+.L316:
 	ldr	r2, [r4, #28]
 	cmp	r3, r2
-	bne	.L297
+	bne	.L303
 	mov	r3, #0
 	str	r3, [r4, #20]
 	str	r3, [r4, #36]
 	str	r3, [r4, #40]
 	str	r3, [r4, #16]
 	str	r3, [r4, #32]
-	b	.L297
-.L309:
+	b	.L303
+.L315:
 	ldr	r2, [r4, #28]
-	ldr	ip, .L312+4
+	ldr	ip, .L318+4
 	add	r2, r2, r2, lsl #3
 	smull	r0, r1, r2, ip
 	asr	r2, r2, #31
@@ -1845,20 +1870,20 @@ playerRangedAttack:
 	streq	r3, [r4, #36]
 	pop	{r4, r5, r6, r7, r8, lr}
 	bx	lr
-.L311:
+.L317:
 	ldr	r2, [r4, #28]
-	ldr	r1, .L312+4
+	ldr	r1, .L318+4
 	smull	r6, r7, r2, r1
 	asr	r1, r2, #31
 	rsb	r1, r1, r7, asr #1
 	cmp	r3, r1
 	moveq	r1, #7
 	streq	r1, [r4, #40]
-	bne	.L297
-	b	.L302
-.L313:
+	bne	.L303
+	b	.L308
+.L319:
 	.align	2
-.L312:
+.L318:
 	.word	player
 	.word	1717986919
 	.word	11025
@@ -1877,23 +1902,23 @@ updatePlayer:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r2, .L325
+	ldr	r2, .L331
 	ldr	r3, [r2, #16]
 	cmp	r3, #7
 	ldrls	pc, [pc, r3, asl #2]
-	b	.L322
-.L317:
-	.word	.L316
+	b	.L328
+.L323:
 	.word	.L322
-	.word	.L322
-	.word	.L322
-	.word	.L318
-	.word	.L319
-	.word	.L322
-	.word	.L320
-.L320:
+	.word	.L328
+	.word	.L328
+	.word	.L328
+	.word	.L324
+	.word	.L325
+	.word	.L328
+	.word	.L326
+.L326:
 	ldr	r3, [r2, #32]
-	ldr	r1, .L325+4
+	ldr	r1, .L331+4
 	add	r3, r3, #1
 	push	{r4, r5}
 	smull	r4, r5, r3, r1
@@ -1902,23 +1927,23 @@ updatePlayer:
 	add	r1, r1, r1, lsl #2
 	cmp	r3, r1, lsl #1
 	str	r3, [r2, #32]
-	beq	.L324
+	beq	.L330
 	pop	{r4, r5}
 	bx	lr
-.L319:
+.L325:
 	b	playerRangedAttack
-.L318:
-	b	playerCloseAttack
-.L316:
-	b	playerWait
-.L322:
-	bx	lr
 .L324:
+	b	playerCloseAttack
+.L322:
+	b	playerWait
+.L328:
+	bx	lr
+.L330:
 	pop	{r4, r5}
 	b	playerDying.part.2
-.L326:
+.L332:
 	.align	2
-.L325:
+.L331:
 	.word	player
 	.word	1717986919
 	.size	updatePlayer, .-updatePlayer
@@ -1933,14 +1958,14 @@ updateEnergyWave:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L329
+	ldr	r3, .L335
 	ldr	r3, [r3, #20]
 	cmp	r3, #0
 	bxeq	lr
 	b	updateEnergyWave.part.9
-.L330:
+.L336:
 	.align	2
-.L329:
+.L335:
 	.word	playerEnergyWave
 	.size	updateEnergyWave, .-updateEnergyWave
 	.align	2
@@ -1954,18 +1979,18 @@ drawEnergyWave:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L333
+	ldr	r3, .L339
 	ldr	r3, [r3, #20]
 	cmp	r3, #0
 	bne	drawEnergyWave.part.10
-.L332:
+.L338:
 	mov	r2, #512
-	ldr	r3, .L333+4
+	ldr	r3, .L339+4
 	strh	r2, [r3, #48]	@ movhi
 	bx	lr
-.L334:
+.L340:
 	.align	2
-.L333:
+.L339:
 	.word	playerEnergyWave
 	.word	shadowOAM
 	.size	drawEnergyWave, .-drawEnergyWave
@@ -1979,21 +2004,21 @@ fireEnemyEnergyWave:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
-	ldr	ip, .L348
+	ldr	ip, .L354
 	mov	r2, ip
 	ldr	r1, [r2, #20]
 	cmp	r1, #0
 	mov	r3, #0
-	beq	.L347
-.L336:
+	beq	.L353
+.L342:
 	add	r3, r3, #1
 	cmp	r3, #4
 	add	r2, r2, #44
 	bxeq	lr
 	ldr	r1, [r2, #20]
 	cmp	r1, #0
-	bne	.L336
-.L347:
+	bne	.L342
+.L353:
 	push	{r4, r5, lr}
 	ldr	r5, [r0, #28]
 	cmp	r5, #1
@@ -2012,7 +2037,7 @@ fireEnemyEnergyWave:
 	subgt	r0, r0, #23
 	addle	r0, r0, #23
 	str	r0, [r2, #4]
-	ldr	r2, .L348+4
+	ldr	r2, .L354+4
 	add	lr, lr, r3
 	add	r3, r3, lr, lsl r1
 	ldm	r2, {r0, r2}
@@ -2022,9 +2047,9 @@ fireEnemyEnergyWave:
 	str	r1, [r3, #20]
 	pop	{r4, r5, lr}
 	bx	lr
-.L349:
+.L355:
 	.align	2
-.L348:
+.L354:
 	.word	enemyWaves
 	.word	player
 	.size	fireEnemyEnergyWave, .-fireEnemyEnergyWave
@@ -2045,19 +2070,19 @@ enemyRangedAttack:
 	push	{r4, r5, r6, r7, r8, lr}
 	mov	r4, r0
 	str	r3, [r0, #56]
-	beq	.L360
+	beq	.L366
 	cmp	r2, #3
-	beq	.L361
+	beq	.L367
 	cmp	r2, #5
-	beq	.L362
+	beq	.L368
 	cmp	r2, #6
-	beq	.L363
-.L350:
+	beq	.L369
+.L356:
 	pop	{r4, r5, r6, r7, r8, lr}
 	bx	lr
-.L361:
+.L367:
 	ldr	r2, [r0, #72]
-	ldr	ip, .L365
+	ldr	ip, .L371
 	lsl	r2, r2, #3
 	smull	r0, r1, r2, ip
 	asr	r2, r2, #31
@@ -2067,27 +2092,27 @@ enemyRangedAttack:
 	moveq	r3, #1
 	streq	r2, [r4, #48]
 	streq	r3, [r4, #76]
-	b	.L350
-.L360:
+	b	.L356
+.L366:
 	ldr	r2, [r0, #52]
 	cmp	r2, #6
-	beq	.L364
+	beq	.L370
 	cmp	r2, #7
-	bne	.L350
+	bne	.L356
 	ldr	r2, [r0, #72]
-.L355:
-	ldr	ip, .L365
+.L361:
+	ldr	ip, .L371
 	rsb	r2, r2, r2, lsl #3
 	smull	r0, r1, r2, ip
 	asr	r2, r2, #31
 	rsb	r2, r2, r1, asr #2
 	cmp	r3, r2
-	bne	.L350
+	bne	.L356
 	mov	r3, #0
-	ldr	r2, .L365+4
-	ldr	r0, .L365+8
-	ldr	r5, .L365+12
-	ldr	r1, .L365+16
+	ldr	r2, .L371+4
+	ldr	r0, .L371+8
+	ldr	r5, .L371+12
+	ldr	r1, .L371+16
 	mov	lr, pc
 	bx	r5
 	mov	r2, #6
@@ -2098,12 +2123,12 @@ enemyRangedAttack:
 	mov	r0, r4
 	pop	{r4, r5, r6, r7, r8, lr}
 	b	fireEnemyEnergyWave
-.L363:
+.L369:
 	ldr	r2, [r0, #72]
 	cmp	r3, r2
-	bne	.L350
+	bne	.L356
 	mov	r3, #0
-	ldr	r2, .L365+20
+	ldr	r2, .L371+20
 	str	r3, [r0, #76]
 	str	r3, [r0, #48]
 	str	r3, [r0, #52]
@@ -2111,7 +2136,7 @@ enemyRangedAttack:
 	str	r3, [r0, #56]
 	mov	lr, pc
 	bx	r2
-	ldr	r3, .L365+24
+	ldr	r3, .L371+24
 	smull	r6, r7, r0, r3
 	asr	r3, r0, #31
 	rsb	r3, r3, r7, asr #5
@@ -2119,10 +2144,10 @@ enemyRangedAttack:
 	rsb	r3, r3, r3, lsl #4
 	sub	r3, r0, r3, lsl #2
 	str	r3, [r4, #60]
-	b	.L350
-.L362:
+	b	.L356
+.L368:
 	ldr	r2, [r0, #72]
-	ldr	ip, .L365
+	ldr	ip, .L371
 	add	r2, r2, r2, lsl #3
 	smull	r0, r1, r2, ip
 	asr	r2, r2, #31
@@ -2132,20 +2157,20 @@ enemyRangedAttack:
 	streq	r3, [r4, #48]
 	pop	{r4, r5, r6, r7, r8, lr}
 	bx	lr
-.L364:
+.L370:
 	ldr	r2, [r0, #72]
-	ldr	r1, .L365
+	ldr	r1, .L371
 	smull	r6, r7, r2, r1
 	asr	r1, r2, #31
 	rsb	r1, r1, r7, asr #1
 	cmp	r3, r1
 	moveq	r1, #7
 	streq	r1, [r0, #52]
-	bne	.L350
-	b	.L355
-.L366:
+	bne	.L356
+	b	.L361
+.L372:
 	.align	2
-.L365:
+.L371:
 	.word	1717986919
 	.word	11025
 	.word	swish
@@ -2164,29 +2189,29 @@ updateEnemies.part.11:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, r5, r6, lr}
-	ldr	r3, .L389
+	ldr	r3, .L395
 	ldr	r3, [r3]
 	cmp	r3, #0
 	sub	sp, sp, #16
 	mov	r4, r0
-	bne	.L388
-.L368:
+	bne	.L394
+.L374:
 	ldr	r3, [r4, #40]
-.L370:
+.L376:
 	cmp	r3, #7
 	ldrls	pc, [pc, r3, asl #2]
-	b	.L367
-.L374:
-	.word	.L373
-	.word	.L375
-	.word	.L376
-	.word	.L377
-	.word	.L378
+	b	.L373
+.L380:
 	.word	.L379
-	.word	.L367
-	.word	.L380
-.L388:
-	ldr	r5, .L389+4
+	.word	.L381
+	.word	.L382
+	.word	.L383
+	.word	.L384
+	.word	.L385
+	.word	.L373
+	.word	.L386
+.L394:
+	ldr	r5, .L395+4
 	ldr	r3, [r0, #20]
 	add	r0, r5, #12
 	ldm	r0, {r0, r1}
@@ -2195,19 +2220,19 @@ updateEnemies.part.11:
 	ldm	r5, {ip, lr}
 	ldr	r1, [r4, #4]
 	str	r0, [sp, #8]
-	ldr	r6, .L389+8
+	ldr	r6, .L395+8
 	ldr	r0, [r4]
 	stm	sp, {ip, lr}
 	mov	lr, pc
 	bx	r6
 	cmp	r0, #0
-	beq	.L368
+	beq	.L374
 	ldr	r3, [r5, #20]
 	cmp	r3, #0
 	ldr	r3, [r4, #40]
-	beq	.L370
+	beq	.L376
 	cmp	r3, #7
-	beq	.L380
+	beq	.L386
 	mov	r3, #0
 	mov	r0, #7
 	mov	r1, #4
@@ -2217,56 +2242,56 @@ updateEnemies.part.11:
 	str	r3, [r5, #20]
 	str	r1, [r4, #48]
 	str	r2, [r4, #52]
-.L380:
+.L386:
 	mov	r0, r4
 	add	sp, sp, #16
 	@ sp needed
 	pop	{r4, r5, r6, lr}
 	b	enemyDying
-.L373:
-	mov	r0, r4
-	add	sp, sp, #16
-	@ sp needed
-	pop	{r4, r5, r6, lr}
-	b	enemyWait
-.L375:
-	mov	r0, r4
-	add	sp, sp, #16
-	@ sp needed
-	pop	{r4, r5, r6, lr}
-	b	enemyVulnerable
-.L376:
-	mov	r0, r4
-	add	sp, sp, #16
-	@ sp needed
-	pop	{r4, r5, r6, lr}
-	b	enemyApproach
-.L377:
-	mov	r0, r4
-	add	sp, sp, #16
-	@ sp needed
-	pop	{r4, r5, r6, lr}
-	b	enemyRetreat
-.L378:
-	mov	r0, r4
-	add	sp, sp, #16
-	@ sp needed
-	pop	{r4, r5, r6, lr}
-	b	enemyCloseAttack
 .L379:
 	mov	r0, r4
 	add	sp, sp, #16
 	@ sp needed
 	pop	{r4, r5, r6, lr}
+	b	enemyWait
+.L381:
+	mov	r0, r4
+	add	sp, sp, #16
+	@ sp needed
+	pop	{r4, r5, r6, lr}
+	b	enemyVulnerable
+.L382:
+	mov	r0, r4
+	add	sp, sp, #16
+	@ sp needed
+	pop	{r4, r5, r6, lr}
+	b	enemyApproach
+.L383:
+	mov	r0, r4
+	add	sp, sp, #16
+	@ sp needed
+	pop	{r4, r5, r6, lr}
+	b	enemyRetreat
+.L384:
+	mov	r0, r4
+	add	sp, sp, #16
+	@ sp needed
+	pop	{r4, r5, r6, lr}
+	b	enemyCloseAttack
+.L385:
+	mov	r0, r4
+	add	sp, sp, #16
+	@ sp needed
+	pop	{r4, r5, r6, lr}
 	b	enemyRangedAttack
-.L367:
+.L373:
 	add	sp, sp, #16
 	@ sp needed
 	pop	{r4, r5, r6, lr}
 	bx	lr
-.L390:
+.L396:
 	.align	2
-.L389:
+.L395:
 	.word	demonMode
 	.word	playerEnergyWave
 	.word	collision
@@ -2299,44 +2324,44 @@ updateGame:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, r5, r6, lr}
 	bl	updatePlayer
-	ldr	r4, .L413
+	ldr	r4, .L419
 	add	r5, r4, #352
-.L395:
+.L401:
 	ldr	r3, [r4, #84]
 	cmp	r3, #0
-	bne	.L411
-.L394:
+	bne	.L417
+.L400:
 	add	r4, r4, #88
 	cmp	r4, r5
-	bne	.L395
-	ldr	r4, .L413+4
+	bne	.L401
+	ldr	r4, .L419+4
 	add	r5, r4, #176
-.L397:
+.L403:
 	ldr	r3, [r4, #20]
 	cmp	r3, #0
-	bne	.L412
-.L396:
+	bne	.L418
+.L402:
 	add	r4, r4, #44
 	cmp	r5, r4
-	bne	.L397
-	ldr	r3, .L413+8
+	bne	.L403
+	ldr	r3, .L419+8
 	ldr	r3, [r3, #20]
 	cmp	r3, #0
 	blne	updateEnergyWave.part.9
-.L398:
+.L404:
 	pop	{r4, r5, r6, lr}
 	b	updateTargetPointer
-.L412:
+.L418:
 	mov	r0, r4
 	bl	updateEnemyEnergyWaves.part.12
-	b	.L396
-.L411:
+	b	.L402
+.L417:
 	mov	r0, r4
 	bl	updateEnemies.part.11
-	b	.L394
-.L414:
+	b	.L400
+.L420:
 	.align	2
-.L413:
+.L419:
 	.word	enemies
 	.word	enemyWaves
 	.word	playerEnergyWave
@@ -2353,16 +2378,16 @@ drawEnemyEnergyWaves:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	push	{r4, r5, lr}
 	mov	r4, #512
-	ldr	r3, .L423
-	ldr	r2, .L423+4
-	ldr	lr, .L423+8
-	ldr	r5, .L423+12
+	ldr	r3, .L429
+	ldr	r2, .L429+4
+	ldr	lr, .L429+8
+	ldr	r5, .L429+12
 	add	r0, r3, #176
-.L420:
+.L426:
 	ldr	r1, [r3, #20]
 	cmp	r1, #0
 	strheq	r4, [r2, #56]	@ movhi
-	beq	.L419
+	beq	.L425
 	ldr	r1, [r3]
 	ldr	ip, [r3, #32]
 	strh	r1, [r2, #56]	@ movhi
@@ -2373,16 +2398,16 @@ drawEnemyEnergyWaves:
 	strhne	ip, [r2, #58]	@ movhi
 	strheq	r1, [r2, #58]	@ movhi
 	strh	lr, [r2, #60]	@ movhi
-.L419:
+.L425:
 	add	r3, r3, #44
 	cmp	r3, r0
 	add	r2, r2, #8
-	bne	.L420
+	bne	.L426
 	pop	{r4, r5, lr}
 	bx	lr
-.L424:
+.L430:
 	.align	2
-.L423:
+.L429:
 	.word	enemyWaves
 	.word	shadowOAM
 	.word	12804
@@ -2401,31 +2426,31 @@ drawGame:
 	push	{r4, lr}
 	bl	drawPlayer
 	bl	drawEnemies
-	ldr	r3, .L430
+	ldr	r3, .L436
 	ldr	r3, [r3, #20]
 	cmp	r3, #0
-	bne	.L429
+	bne	.L435
 	mov	r2, #512
-	ldr	r3, .L430+4
+	ldr	r3, .L436+4
 	strh	r2, [r3, #48]	@ movhi
-.L427:
+.L433:
 	bl	drawEnemyEnergyWaves
-	ldr	r4, .L430+8
+	ldr	r4, .L436+8
 	bl	drawTargetPointer
 	mov	r3, #512
 	mov	r2, #117440512
-	ldr	r1, .L430+4
+	ldr	r1, .L436+4
 	mov	r0, #3
 	mov	lr, pc
 	bx	r4
 	pop	{r4, lr}
 	bx	lr
-.L429:
+.L435:
 	bl	drawEnergyWave.part.10
-	b	.L427
-.L431:
+	b	.L433
+.L437:
 	.align	2
-.L430:
+.L436:
 	.word	playerEnergyWave
 	.word	shadowOAM
 	.word	DMANow
@@ -2459,9 +2484,9 @@ updateEnemyEnergyWaves:
 	.section	.rodata
 	.align	2
 	.set	.LANCHOR0,. + 0
-	.type	CSWTCH.63, %object
-	.size	CSWTCH.63, 16
-CSWTCH.63:
+	.type	CSWTCH.65, %object
+	.size	CSWTCH.65, 16
+CSWTCH.65:
 	.word	4
 	.word	2
 	.word	5

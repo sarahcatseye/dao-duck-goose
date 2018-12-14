@@ -463,6 +463,12 @@ void enemyCloseAttack(ENEMY *e) {
         }
     }
     if (e->aniStateR == 3) {
+        if (player.attacking) {
+            if ((target < 2 && e->index < 2) || (target >= 2 && e->index >= 2)) {
+                playerEnergyWave.active = 0;
+                playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
+            }
+        }
         if (e->timer == e->closeAttackTime) {
             e->aniStateR = 4;
             e->aniStateC = 0;

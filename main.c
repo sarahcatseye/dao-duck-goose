@@ -34,6 +34,9 @@
 #include "startbg.h"
 #include "instructionsbg0.h"
 #include "instructionsbg1.h"
+#include "instructionsbg2.h"
+#include "instructionsbg3.h"
+#include "instructionsbg4.h"
 #include "gamebg0.h"
 #include "gamebg1.h"
 #include "pausebg0.h"
@@ -63,8 +66,12 @@ void initialize();
 // State Prototypes
 void goToStart();
 void start();
-void goToInstructions();
-void instructions();
+void goToInstructions1();
+void instructions1();
+void goToInstructions2();
+void instructions2();
+void goToInstructions3();
+void instructions3();
 void goToGame();
 void game();
 void goToPause();
@@ -79,7 +86,7 @@ OBJ_ATTR shadowOAM[128];
 int seed;
 
 // States
-enum {START, INSTRUCTIONS, GAME, PAUSE, LOSE};
+enum {START, INSTRUCTIONS1, INSTRUCTIONS2, INSTRUCTIONS3, GAME, PAUSE, LOSE};
 int state;
 
 //Button Variables
@@ -101,8 +108,14 @@ int main() {
             case START:
                 start();
                 break;
-            case INSTRUCTIONS:
-                instructions();
+            case INSTRUCTIONS1:
+                instructions1();
+                break;
+            case INSTRUCTIONS2:
+                instructions2();
+                break;
+            case INSTRUCTIONS3:
+                instructions3();
                 break;
             case GAME:
                 game();
@@ -164,8 +177,12 @@ void start() {
             initGame();
             goToGame();
         } else {
+            hOff = 0;
+            vOff = 0;
+            REG_BG1HOFF = hOff;
+            REG_BG1VOFF = vOff;
             playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
-            goToInstructions();
+            goToInstructions1();
         }
     }
 }
@@ -206,25 +223,72 @@ void game() {
     }
 }
 //Loads the instructions background, tiles, and map. Sets the state to instructions.
-void goToInstructions() {
+void goToInstructions1() {
     DMANow(3, instructionsbg0Pal, PALETTE, (instructionsbg0PalLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
     DMANow(3, &instructionsbg0Tiles, &CHARBLOCK[0], (instructionsbg0TilesLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
     DMANow(3, &instructionsbg0Map, &SCREENBLOCK[31], (instructionsbg0MapLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
-    DMANow(3, &instructionsbg1Tiles, &CHARBLOCK[1], (instructionsbg1TilesLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
-    DMANow(3, &instructionsbg1Map, &SCREENBLOCK[30], (instructionsbg1MapLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
-    hOff = 0;
-    vOff = 0;
-    REG_BG1HOFF = hOff;
-    REG_BG1VOFF = vOff;
-    state = INSTRUCTIONS;
+    DMANow(3, &instructionsbg2Tiles, &CHARBLOCK[1], (instructionsbg2TilesLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
+    DMANow(3, &instructionsbg2Map, &SCREENBLOCK[30], (instructionsbg2MapLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
+    state = INSTRUCTIONS1;
 }
 //Runs the instructions.
-void instructions() {
+void instructions1() {
     waitForVBlank();
     hOff--;
     vOff--;
     REG_BG1HOFF = hOff/4;
     REG_BG1VOFF = vOff/4;
+    if (BUTTON_PRESSED(BUTTON_RIGHT)) {
+        playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
+        goToInstructions2();
+    }
+    if (BUTTON_PRESSED(BUTTON_START)) {
+        playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
+        goToStart();
+    }
+}
+
+void goToInstructions2() {
+    DMANow(3, &instructionsbg3Tiles, &CHARBLOCK[1], (instructionsbg3TilesLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
+    DMANow(3, &instructionsbg3Map, &SCREENBLOCK[30], (instructionsbg3MapLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
+    state = INSTRUCTIONS2;
+}
+
+void instructions2() {
+    waitForVBlank();
+    hOff--;
+    vOff--;
+    REG_BG1HOFF = hOff/4;
+    REG_BG1VOFF = vOff/4;
+    if (BUTTON_PRESSED(BUTTON_LEFT)) {
+        playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
+        goToInstructions1();
+    }
+    if (BUTTON_PRESSED(BUTTON_RIGHT)) {
+        playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
+        goToInstructions3();
+    }
+    if (BUTTON_PRESSED(BUTTON_START)) {
+        playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
+        goToStart();
+    }
+}
+
+void goToInstructions3() {
+    DMANow(3, &instructionsbg4Tiles, &CHARBLOCK[1], (instructionsbg4TilesLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
+    DMANow(3, &instructionsbg4Map, &SCREENBLOCK[30], (instructionsbg4MapLen / 2) | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT);
+    state = INSTRUCTIONS3;
+}
+void instructions3() {
+    waitForVBlank();
+    hOff--;
+    vOff--;
+    REG_BG1HOFF = hOff/4;
+    REG_BG1VOFF = vOff/4;
+    if (BUTTON_PRESSED(BUTTON_LEFT)) {
+        playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
+        goToInstructions2();
+    }
     if (BUTTON_PRESSED(BUTTON_START)) {
         playSoundB(clang, CLANGLEN, CLANGFREQ, 0);
         goToStart();

@@ -1,5 +1,5 @@
 PRODUCT_NAME       = Project
-SOURCES            = main.c text.c pausebg2.c sound.c myLib.c select.c startbg.c pausebg0.c pausebg1.c gamebg0.c gamebg1.c instructionsbg0.c instructionsbg1.c losebg0.c losebg1.c spritesheet.c game.c clang.c MegaHyperUltrastorm.c quack.c SpringBreak.c swish.c VacationWasteland.c
+SOURCES            = main.c text.c pausebg2.c sound.c myLib.c select.c startbg.c pausebg0.c pausebg1.c gamebg0.c gamebg1.c instructionsbg0.c instructionsbg1.c instructionsbg2.c instructionsbg3.c instructionsbg4.c losebg0.c losebg1.c spritesheet.c game.c clang.c MegaHyperUltrastorm.c quack.c SpringBreak.c swish.c VacationWasteland.c
 CCPATH             = C:\cygwin64\bin
 DKPATH             = C:\devkitARM\devkitARM\bin
 VBASIM             = C:\vbam-2.0.1\bin\visualboyadvance-m.exe
